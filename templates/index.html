@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Scraper</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* Main Container */
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: auto;
+            transition: 0.3s;
+        }
+
+        /* Title */
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Input */
+        input {
+            padding: 12px;
+            width: 80%;
+            border: 2px solid #2193b0;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #6dd5ed;
+            box-shadow: 0px 0px 10px rgba(33, 147, 176, 0.3);
+        }
+
+        /* Submit Button */
+        button {
+            padding: 12px 20px;
+            background: #2193b0;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background:rgb(0, 0, 0);
+        }
+
+        /* Error Message */
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Data Display */
+        .result {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .result h3 {
+            color: #2193b0;
+            font-size: 20px;
+        }
+
+        .result p, .result ul {
+            color: #333;
+            font-size: 16px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Google Play Store Scraper 🚀</h2>
+
+    <div class="container">
+        <form method="post">
+            <input type="text" name="app_id" placeholder="Enter App ID (e.g., com.whatsapp)" required>
+            <button type="submit">Fetch Data</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if data %}
+        <div class="result">
+            <h3>📌 {{ data.title }}</h3>
+            <p>🏆 Rating: <strong>{{ data.score }}</strong></p>
+            <p>📥 Installs: <strong>{{ data.installs }}</strong></p>
+            <p>🔗 <a href="{{ data.url }}" target="_blank">Play Store Link</a></p>
+
+            <h4>✅ Latest Reviews</h4>
+            <ul>
+                {% for review in data.reviews %}
+                <li>⭐ {{ review.score }} - {{ review.content[:200] }}...</li>
+                {% endfor %}
+            </ul>
+
+            <h4>🔒 Permissions</h4>
+            <p>{{ ", ".join(data.permissions) }}...</p>
+
+            <h4>🔍 Related Apps</h4>
+            <ul>
+                {% for app in data.related_apps %}
+                <li>{{ app.title }} ({{ app.appId }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
