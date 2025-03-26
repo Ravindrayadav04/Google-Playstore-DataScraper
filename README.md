@@ -16,7 +16,7 @@ This project is a **Flask-based web application** that allows users to fetch det
 - **Google Play Scraper API**
 
 ## Usage
-1. **Enter an App ID** (e.g., `com.whatsapp`)
+1. **Enter an App ID**
 2. Click **Fetch Data**
 3. View the **app details, latest reviews, permissions, and related apps**
 
