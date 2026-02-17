@@ -38,7 +38,7 @@ Now the project also supports **MongoDB integration**, meaning scraped app data 
 - **Instagram** → `com.instagram.android`
 
 ## Screenshots
-![Screenshot (307)](https://github.com/user-attachments/assets/2b54dbe2-6305-4723-afe6-807edd8cb41f)
+<img width="1920" height="890" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/2459ba34-967f-4e7e-aaec-99e007c7778b" />
 
 ## Contributions
 
@@ -46,6 +46,7 @@ Feel free to contribute by submitting a **pull request** or reporting issues!
 
 ## License
 🔒 MIT License - Free to use & modify! 🚀
+
 
 
 
