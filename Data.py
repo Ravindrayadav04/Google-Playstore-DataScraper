@@ -2,11 +2,18 @@ from flask import Flask, render_template, request
 from google_play_scraper import app as gp_app, reviews, permissions, search, Sort
 from pymongo import MongoClient
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
-# MongoDB Connection
-client = MongoClient("mongodb://localhost:27017/")
+# ============================
+# MongoDB Connection (Local + Render)
+# ============================
+# If MONGO_URI exists in Render, it will use Atlas.
+# If not, it will use Local MongoDB.
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+
+client = MongoClient(MONGO_URI)
 db = client["playstore_db"]
 collection = db["apps_data"]
 
@@ -40,7 +47,7 @@ def index():
                     "created_at": datetime.now()
                 }
 
-                # Save to MongoDB
+                # Save to MongoDB (Insert/Update)
                 collection.update_one(
                     {"app_id": app_id},
                     {"$set": data},
