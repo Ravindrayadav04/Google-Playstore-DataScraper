@@ -7,15 +7,13 @@ import os
 app = Flask(__name__)
 
 # ============================
-# MongoDB Connection (Local + Render)
+# MongoDB Connection Function
 # ============================
-# If MONGO_URI exists in Render, it will use Atlas.
-# If not, it will use Local MongoDB.
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-
-client = MongoClient(MONGO_URI)
-db = client["playstore_db"]
-collection = db["apps_data"]
+def get_collection():
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+    client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)
+    db = client["playstore_db"]
+    return db["apps_data"]
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -24,7 +22,7 @@ def index():
     error = None
 
     if request.method == "POST":
-        app_id = request.form.get("app_id").strip()
+        app_id = request.form.get("app_id", "").strip()
 
         if not app_id:
             error = "Please enter an App ID!"
@@ -37,17 +35,18 @@ def index():
 
                 data = {
                     "app_id": app_id,
-                    "title": result1["title"],
-                    "score": result1["score"],
-                    "installs": result1["installs"],
-                    "url": result1["url"],
+                    "title": result1.get("title"),
+                    "score": result1.get("score"),
+                    "installs": result1.get("installs"),
+                    "url": result1.get("url"),
                     "reviews": result2[:5],
                     "permissions": list(app_permissions.keys())[:5],
                     "related_apps": search_results[:5],
                     "created_at": datetime.now()
                 }
 
-                # Save to MongoDB (Insert/Update)
+                # Save to MongoDB (Atlas or Local)
+                collection = get_collection()
                 collection.update_one(
                     {"app_id": app_id},
                     {"$set": data},
